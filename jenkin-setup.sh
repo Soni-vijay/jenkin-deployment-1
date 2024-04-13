@@ -1,36 +1,64 @@
-AWS root user:
-vijaysoni-aws-v1/vijayrkumar.soni@gmail.com/Vj@Ra3363
-dockerhub login:
-user name: vijaysoni1
-password: vijay@3363 
+#!/bin/bash
 
-Root Login url:
-https://vijaysoni-aws-v1.signin.aws.amazon.com/console
+# Check if Jenkins is installed and running or stopped
+if systemctl is-active --quiet jenkins || systemctl is-active --quiet jenkins.service; then
+    echo "Jenkins is already installed and running or stopped. Exiting..."
+    exit 0
+fi
 
-AWS user: 
-Vijay/Sam@3363
-AWS Cli setup:
-key
-AKIARU5UGCD4Y22UWZVS
-values:
-XE0sLqlPIoVx82zqsJ4wvwyzxgqMyqTCsIKMaDho
+# Update package lists
+sudo apt update
 
+# Install OpenJDK 11
+sudo apt install -y openjdk-11-jdk
 
-https://drive.google.com/drive/folders/1R_jZ964XaphdgbaRap4QPsXOhV7OHJZB?usp=share_link
+# Add Jenkins repository key to the system
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
 
-Hadoop password:
-maria_dev/maria_dev
+# Add Jenkins repository to the system
+echo "deb https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list
 
+# Update package lists again to include Jenkins repository
+sudo apt update
 
-new aws account: vijay soni
-vs9701@gmail.com/Vj@Sa9970 
-https://654654332046.signin.aws.amazon.com/console
+# Install Jenkins
+sudo apt install -y jenkins
 
-https://vijay-soni-root.signin.aws.amazon.com/console
-Vijay_master/Sam@9970
+# Start Jenkins service
+sudo systemctl start jenkins
 
-ssh -i /e/Projects/AWS/Aws-Key/CICD-pipeline.pem ubuntu@ec2-100-26-233-18.compute-1.amazonaws.com
+# Enable Jenkins service to start on boot
+sudo systemctl enable jenkins
 
+# Wait for Jenkins to start (optional)
+sleep 30
 
-s3://guruskrupa-vpro-arts/vprofile-v2.war
+# Set a custom initial admin password
+sudo echo "support1" > /var/lib/jenkins/secrets/initialAdminPassword
 
+# Install Jenkins plugins (dependencies)
+# sudo java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin \
+# pipeline \
+# git \
+# github \
+# junit \
+# warnings-ng \
+# credentials \
+# ssh-agent \
+# email-ext \
+# artifactory \
+# docker-workflow \
+# sonar \
+# blueocean \
+# nodejs \
+# ec2 \
+# kubernetes
+
+# Restart Jenkins to apply changes
+sudo systemctl restart jenkins
+
+# Open port 8080 in firewall (if using UFW)
+sudo ufw allow 8080
+
+# Print Jenkins URL
+echo "Jenkins is now installed and running. Access it at: http://localhost:8080"
