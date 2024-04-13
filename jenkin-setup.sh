@@ -10,19 +10,25 @@ fi
 sudo apt update
 
 # Install OpenJDK 11
-sudo apt install -y openjdk-11-jdk
+sudo apt install -y openjdk-17-jdk
+
+# check the java version 
+java -version
 
 # Add Jenkins repository key to the system
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
 
 # Add Jenkins repository to the system
-echo "deb https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
 
 # Update package lists again to include Jenkins repository
-sudo apt update
+sudo apt-get update
 
 # Install Jenkins
-sudo apt install -y jenkins
+sudo apt-get install -y jenkins
 
 # Start Jenkins service
 sudo systemctl start jenkins
@@ -31,7 +37,7 @@ sudo systemctl start jenkins
 sudo systemctl enable jenkins
 
 # Wait for Jenkins to start (optional)
-sleep 30
+sleep 10
 
 # Set a custom initial admin password
 sudo echo "support1" > /var/lib/jenkins/secrets/initialAdminPassword
