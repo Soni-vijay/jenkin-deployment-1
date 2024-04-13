@@ -25,10 +25,10 @@ echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 
 # Update package lists again to include Jenkins repository
-sudo apt-get update
+sudo apt update
 
 # Install Jenkins
-sudo apt-get install -y jenkins
+sudo apt install -y jenkins
 
 # Start Jenkins service
 sudo systemctl start jenkins
@@ -40,7 +40,7 @@ sudo systemctl enable jenkins
 sleep 10
 
 # Set a custom initial admin password
-sudo echo "support1" > /var/lib/jenkins/secrets/initialAdminPassword
+# sudo echo "support1" > /var/lib/jenkins/secrets/initialAdminPassword
 
 # Install Jenkins plugins (dependencies)
 # sudo java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin \
